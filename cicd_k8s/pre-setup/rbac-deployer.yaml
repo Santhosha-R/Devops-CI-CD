@@ -1,0 +1,91 @@
+# One ServiceAccount — "deployer" — shared by Jenkins, GitHub Actions and ArgoCD.
+# One ClusterRole, one ClusterRoleBinding: the same permissions in every namespace,
+# so a new app namespace needs no RBAC change.
+#
+# The app namespaces (frontend/backend/database) are not declared here — each app repo
+# ships its own. Only "cicd" is, because nothing else owns it and the SA lives in it.
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cicd
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: deployer
+  namespace: cicd
+---
+# Kubernetes 1.24+ no longer auto-creates a token Secret for a ServiceAccount.
+# CI needs a long-lived token, so we ask for one explicitly.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: deployer-token
+  namespace: cicd
+  annotations:
+    kubernetes.io/service-account.name: deployer
+type: kubernetes.io/service-account-token
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: deployer
+rules:
+  # --- what a deploy creates and updates ---
+  - apiGroups: [""]
+    resources: [pods, services, secrets, configmaps, persistentvolumeclaims, serviceaccounts, endpoints]
+    verbs: [get, list, watch, create, update, patch, delete]
+  - apiGroups: [apps]
+    resources: [deployments, statefulsets, daemonsets, replicasets]
+    verbs: [get, list, watch, create, update, patch, delete]
+  - apiGroups: [apps]
+    resources: [deployments/scale, statefulsets/scale]
+    verbs: [get, update, patch]
+  - apiGroups: [batch]
+    resources: [jobs, cronjobs]
+    verbs: [get, list, watch, create, update, patch, delete]
+  - apiGroups: [networking.k8s.io]
+    resources: [ingresses, networkpolicies]
+    verbs: [get, list, watch, create, update, patch, delete]
+  - apiGroups: [autoscaling]
+    resources: [horizontalpodautoscalers]
+    verbs: [get, list, watch, create, update, patch, delete]
+  - apiGroups: [policy]
+    resources: [poddisruptionbudgets]
+    verbs: [get, list, watch, create, update, patch, delete]
+
+  # --- namespaces: create + patch (no delete), so a pipeline can own its own namespace ---
+  #   patch/update are REQUIRED because `helm --create-namespace` and `kubectl apply -f 00-namespace.yaml`
+  #   both use server-side apply (a PATCH) on the Namespace. No `delete` — a deploy never removes a
+  #   namespace (that would take down another setup sharing the cluster).
+  - apiGroups: [""]
+    resources: [namespaces]
+    verbs: [get, list, watch, create, update, patch]
+
+  # --- read-only: what a deploy inspects but never changes ---
+  - apiGroups: [""]
+    resources: [pods/log, events, nodes, persistentvolumes]
+    verbs: [get, list, watch]
+  - apiGroups: [storage.k8s.io]
+    resources: [storageclasses]
+    verbs: [get, list, watch]
+  - apiGroups: [networking.k8s.io]
+    resources: [ingressclasses]
+    verbs: [get, list, watch]
+  - apiGroups: [apiextensions.k8s.io]
+    resources: [customresourcedefinitions]
+    verbs: [get, list, watch]      # ArgoCD discovers the API surface on connect
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: deployer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: deployer
+subjects:
+  - kind: ServiceAccount
+    name: deployer
+    namespace: cicd

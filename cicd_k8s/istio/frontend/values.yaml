@@ -1,0 +1,19 @@
+replicaCount: 2
+
+image:
+  repository: 637423622313.dkr.ecr.ap-south-1.amazonaws.com/frontend_react
+  tag: "1"                 # CI overrides with --set image.tag=<run number>
+  pullPolicy: IfNotPresent
+
+imagePullSecret: ecr-creds
+
+# The SPA calls this backend over its public https domain (setup-3 backend).
+backendUrl: "https://istio.backend.hobbyez.com"
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 200m
+    memory: 128Mi

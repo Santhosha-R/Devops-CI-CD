@@ -1,0 +1,34 @@
+# VirtualServices bind the Gateway to the app services (cross-namespace via FQDN).
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: frontend
+  namespace: istio-ingress
+spec:
+  hosts:
+    - "istio.hobbyez.com"
+  gateways:
+    - acadcart-gateway
+  http:
+    - route:
+        - destination:
+            host: frontend.istio-frontend.svc.cluster.local
+            port:
+              number: 80
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: backend
+  namespace: istio-ingress
+spec:
+  hosts:
+    - "istio.backend.hobbyez.com"
+  gateways:
+    - acadcart-gateway
+  http:
+    - route:
+        - destination:
+            host: backend.istio-backend.svc.cluster.local
+            port:
+              number: 3000

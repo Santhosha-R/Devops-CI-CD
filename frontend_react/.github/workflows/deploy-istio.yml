@@ -1,0 +1,60 @@
+# Setup 3 CI → GitOps CD — Frontend for the ISTIO stack, deployed by ArgoCD.
+#
+# This is the GitOps pattern (how MNCs actually do it): CI builds + pushes the image, then COMMITS
+# the new image tag into the manifests repo. CI does NOT deploy — ArgoCD watches cicd_k8s and syncs.
+# Contrast: Setup 1 (Jenkins) and Setup 2 (deploy.yml) deploy directly with kubectl/helm.
+#
+# Repo secrets required:
+#   AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY   - ECR push
+#   DEPLOY_REPO_PAT                            - PAT with WRITE access on itdefined-org-apps/cicd_k8s
+name: setup3-istio-frontend
+on:
+  workflow_dispatch: {}          # trigger the GitOps deploy on demand; ArgoCD reconciles the rest
+
+env:
+  AWS_REGION: ap-south-1
+  REGISTRY: 637423622313.dkr.ecr.ap-south-1.amazonaws.com
+  IMAGE: 637423622313.dkr.ecr.ap-south-1.amazonaws.com/frontend_react
+
+jobs:
+  build-and-gitops:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Immutable tag = git SHA (the prod convention — never 'latest' / build numbers)
+        run: echo "TAG=sha-${GITHUB_SHA:0:7}" >> "$GITHUB_ENV"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Build & push image
+        run: |
+          aws ecr get-login-password --region "$AWS_REGION" | docker login --username AWS --password-stdin "$REGISTRY"
+          docker build -t "$IMAGE:$TAG" .
+          docker push "$IMAGE:$TAG"
+
+      # ── GitOps handoff: commit the tag to the manifests repo; ArgoCD does the deploy ──
+      - name: Checkout manifests repo (cicd_k8s)
+        uses: actions/checkout@v4
+        with:
+          repository: itdefined-org-apps/cicd_k8s
+          token: ${{ secrets.DEPLOY_REPO_PAT }}     # needs WRITE
+          path: gitops
+
+      - name: Bump tag in the istio-frontend ArgoCD Application → commit → push
+        working-directory: gitops
+        run: |
+          yq -i 'with(select(.metadata.name == "istio-frontend");
+                   .spec.source.helm.valuesObject.image.tag = strenv(TAG))' istio/argocd/applications.yaml
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add istio/argocd/applications.yaml
+          git commit -m "istio(frontend): image tag -> $TAG" || { echo "no change — already on $TAG"; exit 0; }
+          git push
+
+      - run: echo "Committed $TAG to cicd_k8s. ArgoCD now reconciles istio-frontend — CI does NOT deploy."

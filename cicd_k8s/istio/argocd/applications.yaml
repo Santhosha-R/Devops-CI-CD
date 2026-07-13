@@ -1,0 +1,47 @@
+# Setup 3 CI/CD — ArgoCD Applications (GitOps). Argo watches the cicd_k8s repo and reconciles.
+# frontend = Helm chart, backend = raw YAML directory. Apply once:  kubectl apply -f applications.yaml
+#
+# Prereqs: push cicd_k8s (Argo syncs the branch, not local files), and register the repo in Argo
+# if it is private (argocd repo add https://github.com/itdefined-org-apps/cicd_k8s.git --username .. --password <PAT>).
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istio-frontend
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/itdefined-org-apps/cicd_k8s.git
+    targetRevision: main
+    path: istio/frontend            # a Helm chart
+    helm:
+      valuesObject:
+        image:
+          tag: "1"                  # CI bumps this (or a human PR) to roll a new image
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: istio-frontend
+  syncPolicy:
+    automated: { prune: true, selfHeal: true }
+    syncOptions: [CreateNamespace=true]
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istio-backend
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/itdefined-org-apps/cicd_k8s.git
+    targetRevision: main
+    path: istio/backend             # raw YAML manifests
+    directory:
+      recurse: false
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: istio-backend
+  syncPolicy:
+    automated: { prune: true, selfHeal: true }
+    syncOptions: [CreateNamespace=true]

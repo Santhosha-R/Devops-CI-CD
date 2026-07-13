@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1560" height="940" viewBox="0 0 1560 940">
+<defs>
+<marker id="ar" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#334155"/></marker>
+<marker id="arB" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#326CE5"/></marker>
+<marker id="arThin" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#8A97A6"/></marker>
+<marker id="arG" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#0E9F6E"/></marker>
+</defs>
+<rect x="0" y="0" width="1560" height="940" rx="0" ry="0" fill="#F4F7FB" stroke="none" stroke-width="2" opacity="1"/>
+<text x="48" y="58" font-family="Helvetica, Arial, sans-serif" font-size="30" font-weight="700" fill="#0F1E2E" text-anchor="start">Gateway API + Envoy Gateway — Architecture</text>
+<text x="48" y="90" font-family="Helvetica, Arial, sans-serif" font-size="16" font-weight="400" fill="#5B6B7B" text-anchor="start">Role-oriented: 3 typed resources owned by 3 people — no annotation sprawl</text>
+<circle cx="96" cy="289.5" r="9.0" fill="none" stroke="#33404F" stroke-width="3.3000000000000003"/>
+<path d="M 79.5 316.5 a 16.5 16.5 0 0 1 33.0 0" fill="none" stroke="#33404F" stroke-width="3.3000000000000003"/>
+<text x="96" y="344" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#33404F" text-anchor="middle">User</text>
+<text x="96" y="361" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#33404F" text-anchor="middle">(Internet)</text>
+<line x1="150" y1="300" x2="214" y2="300" stroke="#334155" stroke-width="2.6" marker-end="url(#ar)" stroke-linecap="round"/>
+<rect x="216" y="245" width="150" height="110" rx="12" ry="12" fill="#fff" stroke="#E3E9F0" stroke-width="1.6" opacity="1"/>
+<circle cx="291" cy="270" r="3.4" fill="#8C4FFF"/>
+<line x1="291" y1="270" x2="280" y2="287" stroke="#8C4FFF" stroke-width="2.4"/>
+<circle cx="280" cy="288" r="3.2" fill="#8C4FFF"/>
+<line x1="291" y1="270" x2="291" y2="287" stroke="#8C4FFF" stroke-width="2.4"/>
+<circle cx="291" cy="288" r="3.2" fill="#8C4FFF"/>
+<line x1="291" y1="270" x2="302" y2="287" stroke="#8C4FFF" stroke-width="2.4"/>
+<circle cx="302" cy="288" r="3.2" fill="#8C4FFF"/>
+<text x="291" y="315" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#1B2733" text-anchor="middle">AWS NLB</text>
+<path d="M 250.1 333.6 v-3.5 a4.8999999999999995 4.8999999999999995 0 0 1 9.799999999999999 0 v3.5" fill="none" stroke="#8C4FFF" stroke-width="1.54"/>
+<rect x="248.7" y="333.6" width="12.6" height="9.1" rx="1.75" fill="#8C4FFF"/>
+<text x="272" y="339" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#5B6B7B" text-anchor="start">ACM TLS</text>
+<line x1="366" y1="300" x2="428" y2="300" stroke="#334155" stroke-width="2.6" marker-end="url(#ar)" stroke-linecap="round"/>
+<text x="397" y="290" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#7A8AA0" text-anchor="middle">HTTP</text>
+<rect x="428" y="150" width="1092" height="300" rx="18" ry="18" fill="#FBF5F9" stroke="#AC6199" stroke-width="2" opacity="1"/>
+<rect x="428" y="150" width="1092" height="40" rx="18" ry="18" fill="#AC6199" stroke="none" stroke-width="2" opacity="1"/>
+<rect x="428" y="170" width="1092" height="20" rx="0" ry="0" fill="#AC6199" stroke="none" stroke-width="2" opacity="1"/>
+<circle cx="454" cy="170" r="13" fill="#fff" stroke="#E3E9F0" stroke-width="1.5"/>
+<g transform="translate(445.00,161.00) scale(0.7500)" fill="#AC6199"><path d="m23.351 7.593-7.068-4.379a1.034 1.034 0 0 0-.84-.117c-.02.01-.052.021-.074.032L8.471 6.105a.695.695 0 0 0-.435.68l.17 7.355c.01.298.191.595.478.765l7.068 4.38c.255.159.574.201.84.116.02-.01.053-.021.074-.032l6.898-2.976a.705.705 0 0 0 .436-.68l-.17-7.355c-.011-.297-.192-.584-.479-.765m-7.185 10.044-6.143-3.805-.149-6.388 5.995-2.583 6.143 3.805.149 6.388zm.011-6.027a.832.832 0 0 0-.414-.67l-5.06-3.135-.159.064.032 1.52 4.007 2.487.095 4.06 1.53.946.086-.032zm-6.058 7.132L5.41 15.83l-.116-4.89 2.146-.924-.042-1.69-3.327 1.435a.611.611 0 0 0-.382.595l.138 5.74c0 .265.16.52.414.67l5.516 3.422c.224.138.5.18.734.106a.15.15 0 0 1 .064-.021l3.252-1.403-1.616-1zm-2.615-6.1-1.52-.947.032 1.446 1.52.946zm2.19 5.059-.032-1.414-1.329-.83c-.021-.01-.042-.031-.053-.042l.032 1.425zm-4.751 1.902-3.476-2.158-.085-3.613 1.7-.734-.031-1.445-2.72 1.17a.527.527 0 0 0-.33.51l.106 4.336c0 .223.138.446.35.574l4.167 2.582a.822.822 0 0 0 .627.096c.021-.01.043-.01.064-.021l2.561-1.106-1.392-.86Z"/></g>
+<text x="474" y="176" font-family="Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#fff" text-anchor="start">Kubernetes cluster</text>
+<rect x="470" y="228" width="226" height="144" rx="12" ry="12" fill="#fff" stroke="#AC6199" stroke-width="2" opacity="1"/>
+<circle cx="504" cy="268" r="20" fill="#fff" stroke="#E3E9F0" stroke-width="1.5"/>
+<g transform="translate(491.00,255.00) scale(1.0833)" fill="#AC6199"><path d="m23.351 7.593-7.068-4.379a1.034 1.034 0 0 0-.84-.117c-.02.01-.052.021-.074.032L8.471 6.105a.695.695 0 0 0-.435.68l.17 7.355c.01.298.191.595.478.765l7.068 4.38c.255.159.574.201.84.116.02-.01.053-.021.074-.032l6.898-2.976a.705.705 0 0 0 .436-.68l-.17-7.355c-.011-.297-.192-.584-.479-.765m-7.185 10.044-6.143-3.805-.149-6.388 5.995-2.583 6.143 3.805.149 6.388zm.011-6.027a.832.832 0 0 0-.414-.67l-5.06-3.135-.159.064.032 1.52 4.007 2.487.095 4.06 1.53.946.086-.032zm-6.058 7.132L5.41 15.83l-.116-4.89 2.146-.924-.042-1.69-3.327 1.435a.611.611 0 0 0-.382.595l.138 5.74c0 .265.16.52.414.67l5.516 3.422c.224.138.5.18.734.106a.15.15 0 0 1 .064-.021l3.252-1.403-1.616-1zm-2.615-6.1-1.52-.947.032 1.446 1.52.946zm2.19 5.059-.032-1.414-1.329-.83c-.021-.01-.042-.031-.053-.042l.032 1.425zm-4.751 1.902-3.476-2.158-.085-3.613 1.7-.734-.031-1.445-2.72 1.17a.527.527 0 0 0-.33.51l.106 4.336c0 .223.138.446.35.574l4.167 2.582a.822.822 0 0 0 .627.096c.021-.01.043-.01.064-.021l2.561-1.106-1.392-.86Z"/></g>
+<text x="534" y="262" font-family="Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#1B2733" text-anchor="start">Envoy proxy</text>
+<text x="534" y="281" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#5B6B7B" text-anchor="start">data plane</text>
+<line x1="486" y1="302" x2="680" y2="302" stroke="#EDF1F6" stroke-width="1.5"/>
+<text x="583.0" y="324" font-family="Helvetica, Arial, sans-serif" font-size="11.5" font-weight="middle" fill="#5B6B7B" text-anchor="16">programmed via xDS</text>
+<text x="583.0" y="341" font-family="Helvetica, Arial, sans-serif" font-size="11.5" font-weight="middle" fill="#5B6B7B" text-anchor="16">plain HTTP (TLS at NLB)</text>
+<rect x="1130" y="206" width="252" height="106" rx="12" ry="12" fill="#fff" stroke="#E3E9F0" stroke-width="1.6" opacity="1"/>
+<rect x="1130" y="206" width="252" height="28" rx="12" ry="12" fill="#FBF0F7" stroke="none" stroke-width="2" opacity="1"/>
+<rect x="1130" y="220" width="252" height="14" rx="0" ry="0" fill="#FBF0F7" stroke="none" stroke-width="2" opacity="1"/>
+<text x="1144" y="225" font-family="Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#8A4E77" text-anchor="start">namespace app1</text>
+<text x="1146" y="261" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1B2733" text-anchor="start">Service A</text>
+<text x="1146" y="280" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#5B6B7B" text-anchor="start">ClusterIP → Pods</text>
+<polyline points="696,300 1100,300 1100,259.0 1126,259.0" fill="none" stroke="#334155" stroke-width="2.6" marker-end="url(#ar)" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="1014" y="251.0" font-family="Helvetica, Arial, sans-serif" font-size="10.5" font-weight="600" fill="#8A4E77" text-anchor="middle">host: shop.example.com</text>
+<rect x="1130" y="334" width="252" height="106" rx="12" ry="12" fill="#fff" stroke="#E3E9F0" stroke-width="1.6" opacity="1"/>
+<rect x="1130" y="334" width="252" height="28" rx="12" ry="12" fill="#F0FBF2" stroke="none" stroke-width="2" opacity="1"/>
+<rect x="1130" y="348" width="252" height="14" rx="0" ry="0" fill="#F0FBF2" stroke="none" stroke-width="2" opacity="1"/>
+<text x="1144" y="353" font-family="Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#3F7A4E" text-anchor="start">namespace app2</text>
+<text x="1146" y="389" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1B2733" text-anchor="start">Service B</text>
+<text x="1146" y="408" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#5B6B7B" text-anchor="start">ClusterIP → Pods</text>
+<polyline points="696,300 1100,300 1100,387.0 1126,387.0" fill="none" stroke="#334155" stroke-width="2.6" marker-end="url(#ar)" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="1014" y="379.0" font-family="Helvetica, Arial, sans-serif" font-size="10.5" font-weight="600" fill="#3F7A4E" text-anchor="middle">host: api.example.com</text>
+<rect x="40" y="520" width="1480" height="372" rx="18" ry="18" fill="#FFFFFF" stroke="#E3E9F0" stroke-width="1.6" opacity="1"/>
+<text x="64" y="556" font-family="Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#0F1E2E" text-anchor="start">Gateway API — 3 roles, 3 resources</text>
+<text x="64" y="580" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#5B6B7B" text-anchor="start">The big change from Ingress: config is split by who owns it, and it is typed (portable, not un-typed annotations).</text>
+<rect x="88" y="614" width="316" height="176" rx="12" ry="12" fill="#F3EEFF" stroke="#8C4FFF" stroke-width="1.9" opacity="1"/>
+<text x="106" y="648" font-family="Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#1B2733" text-anchor="start">GatewayClass</text>
+<text x="106" y="670" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#8C4FFF" text-anchor="start">owned by: platform / infra</text>
+<line x1="104" y1="684" x2="388" y2="684" stroke="#0000001a" stroke-width="1.5"/>
+<text x="246.0" y="712" font-family="Helvetica, Arial, sans-serif" font-size="12.5" font-weight="middle" fill="#33404F" text-anchor="19">which implementation</text>
+<text x="246.0" y="729" font-family="Helvetica, Arial, sans-serif" font-size="12.5" font-weight="middle" fill="#33404F" text-anchor="19">controllerName: Envoy Gateway</text>
+<line x1="460" y1="702.0" x2="410" y2="702.0" stroke="#8A97A6" stroke-width="2.2" marker-end="url(#ar)" stroke-linecap="round"/>
+<text x="435" y="692.0" font-family="Helvetica, Arial, sans-serif" font-size="10.5" font-weight="600" fill="#8A97A6" text-anchor="middle">references</text>
+<rect x="460" y="614" width="316" height="176" rx="12" ry="12" fill="#E7F8F0" stroke="#0E9F6E" stroke-width="1.9" opacity="1"/>
+<text x="478" y="648" font-family="Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#1B2733" text-anchor="start">Gateway</text>
+<text x="478" y="670" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#0E9F6E" text-anchor="start">owned by: cluster operator</text>
+<line x1="476" y1="684" x2="760" y2="684" stroke="#0000001a" stroke-width="1.5"/>
+<text x="618.0" y="712" font-family="Helvetica, Arial, sans-serif" font-size="12.5" font-weight="middle" fill="#33404F" text-anchor="19">listeners: :443, protocol,</text>
+<text x="618.0" y="729" font-family="Helvetica, Arial, sans-serif" font-size="12.5" font-weight="middle" fill="#33404F" text-anchor="19">TLS cert, allowed hostnames</text>
+<line x1="832" y1="702.0" x2="782" y2="702.0" stroke="#8A97A6" stroke-width="2.2" marker-end="url(#ar)" stroke-linecap="round"/>
+<text x="807" y="692.0" font-family="Helvetica, Arial, sans-serif" font-size="10.5" font-weight="600" fill="#8A97A6" text-anchor="middle">references</text>
+<rect x="832" y="614" width="316" height="176" rx="12" ry="12" fill="#FFF3E6" stroke="#E8791A" stroke-width="1.9" opacity="1"/>
+<text x="850" y="648" font-family="Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#1B2733" text-anchor="start">HTTPRoute</text>
+<text x="850" y="670" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#E8791A" text-anchor="start">owned by: app developer</text>
+<line x1="848" y1="684" x2="1132" y2="684" stroke="#0000001a" stroke-width="1.5"/>
+<text x="990.0" y="712" font-family="Helvetica, Arial, sans-serif" font-size="12.5" font-weight="middle" fill="#33404F" text-anchor="19">rules: path / header / method</text>
+<text x="990.0" y="729" font-family="Helvetica, Arial, sans-serif" font-size="12.5" font-weight="middle" fill="#33404F" text-anchor="19">→ Service (+ traffic weights)</text>
+<rect x="1216" y="614" width="268" height="176" rx="12" ry="12" fill="#FBF5F9" stroke="#AC6199" stroke-width="1.9" opacity="1"/>
+<circle cx="1252" cy="654" r="19" fill="#fff" stroke="#E3E9F0" stroke-width="1.5"/>
+<g transform="translate(1239.50,641.50) scale(1.0417)" fill="#AC6199"><path d="m23.351 7.593-7.068-4.379a1.034 1.034 0 0 0-.84-.117c-.02.01-.052.021-.074.032L8.471 6.105a.695.695 0 0 0-.435.68l.17 7.355c.01.298.191.595.478.765l7.068 4.38c.255.159.574.201.84.116.02-.01.053-.021.074-.032l6.898-2.976a.705.705 0 0 0 .436-.68l-.17-7.355c-.011-.297-.192-.584-.479-.765m-7.185 10.044-6.143-3.805-.149-6.388 5.995-2.583 6.143 3.805.149 6.388zm.011-6.027a.832.832 0 0 0-.414-.67l-5.06-3.135-.159.064.032 1.52 4.007 2.487.095 4.06 1.53.946.086-.032zm-6.058 7.132L5.41 15.83l-.116-4.89 2.146-.924-.042-1.69-3.327 1.435a.611.611 0 0 0-.382.595l.138 5.74c0 .265.16.52.414.67l5.516 3.422c.224.138.5.18.734.106a.15.15 0 0 1 .064-.021l3.252-1.403-1.616-1zm-2.615-6.1-1.52-.947.032 1.446 1.52.946zm2.19 5.059-.032-1.414-1.329-.83c-.021-.01-.042-.031-.053-.042l.032 1.425zm-4.751 1.902-3.476-2.158-.085-3.613 1.7-.734-.031-1.445-2.72 1.17a.527.527 0 0 0-.33.51l.106 4.336c0 .223.138.446.35.574l4.167 2.582a.822.822 0 0 0 .627.096c.021-.01.043-.01.064-.021l2.561-1.106-1.392-.86Z"/></g>
+<text x="1280" y="648" font-family="Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1B2733" text-anchor="start">Envoy Gateway</text>
+<text x="1280" y="667" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#5B6B7B" text-anchor="start">controller</text>
+<line x1="1232" y1="686" x2="1468" y2="686" stroke="#0000001a" stroke-width="1.5"/>
+<text x="1350" y="714" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="middle" fill="#5B6B7B" text-anchor="18">watches the 3 resources</text>
+<text x="1350" y="731" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="middle" fill="#5B6B7B" text-anchor="18">→ Envoy config (xDS)</text>
+<text x="1350" y="748" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="middle" fill="#5B6B7B" text-anchor="18">→ programs the proxy</text>
+<polyline points="1350,614 1350,514 583.0,514 583.0,372" fill="none" stroke="#AC6199" stroke-width="1.8" marker-end="url(#ar)" stroke-dasharray="6,6" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="966.5" y="506" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#8A4E77" text-anchor="middle">programs the Envoy proxy (xDS)</text>
+</svg>

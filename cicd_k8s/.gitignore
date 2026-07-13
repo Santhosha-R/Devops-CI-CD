@@ -1,0 +1,7 @@
+# Cluster credentials — never commit
+kubeconfig-*.yaml
+*.kubeconfig
+ca.crt
+*.key
+.DS_Store
+pre-setup/demo.env

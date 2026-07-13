@@ -1,0 +1,6 @@
+# Force LF on scripts + manifests so they run in Git Bash / WSL / Linux on Windows.
+# CRLF would break the `#!/usr/bin/env bash` shebang and corrupt YAML that scripts
+# heredoc into kubectl/helm.
+*.sh   text eol=lf
+*.yaml text eol=lf
+*.yml  text eol=lf

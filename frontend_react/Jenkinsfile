@@ -1,0 +1,105 @@
+// ============================================================================
+// Frontend CI/CD pipeline — SETUP 1 (ingress-nginx). Deployed via raw YAML.
+//
+// Flow:  SonarQube -> docker build -> Trivy -> push immutable image
+//        -> deploy: kubectl apply the k8s manifests + set the new image tag
+//
+// Jenkins credentials this needs:
+//   sonar_token, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY  (build/push)
+//   kubeconfig-deployer  (Secret file — the deployer kubeconfig)
+//   github               (username/token — to clone the deploy repo cicd_k8s)
+// ============================================================================
+pipeline {
+    agent any
+
+    environment {
+        SONAR_HOST_URL  = "http://13.126.117.83:9000"
+        
+        REGISTRY        = "637423622313.dkr.ecr.ap-south-1.amazonaws.com"
+        IMAGE           = "637423622313.dkr.ecr.ap-south-1.amazonaws.com/frontend_react"
+        IMAGE_TAG       = "${env.BUILD_NUMBER}"
+
+        AWS_REGION      = "ap-south-1"
+
+    }
+
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+        timeout(time: 30, unit: 'MINUTES')
+        timestamps()
+        disableConcurrentBuilds()
+    }
+
+    stages {
+
+        stage('Test') {
+            // CRA test with coverage -> writes coverage/lcov.info, which Sonar imports next.
+            // CI=true + --watchAll=false make it run once and exit (no interactive watch).
+            steps {
+                sh '''
+                    npm install
+                    CI=true npm test -- --coverage --watchAll=false
+                '''
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withCredentials([string(credentialsId: 'sonar_token', variable: 'SONAR_TOKEN')]) {
+                    sh 'sonar-scanner -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.token=$SONAR_TOKEN'
+                }
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                script {
+                    image = docker.build("${IMAGE}:${IMAGE_TAG}", ".")
+                }
+            }
+        }
+
+        stage('Trivy Scan') {
+            steps {
+                sh "trivy image --severity LOW,MEDIUM,HIGH --exit-code 0 --format table ${IMAGE}:${IMAGE_TAG}"
+                sh "trivy image --severity CRITICAL --exit-code 0 --ignore-unfixed --format table ${IMAGE}:${IMAGE_TAG}"
+            }
+        }
+        
+        stage('Push Image') {
+            environment {
+                AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
+                AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+            }
+            steps {
+                sh '''
+                    aws ecr get-login-password --region ${AWS_REGION} \
+                      | docker login --username AWS --password-stdin ${REGISTRY}
+                    docker push ${IMAGE}:${IMAGE_TAG}
+                '''
+            }
+        }
+
+        stage('Deploy (YAML)') {
+            steps {
+                // Clone the deploy repo (cicd_k8s) the declarative way — Jenkins injects the
+                // 'github' credential; the token never appears in the URL, log, or process list.
+                dir('deploy') {
+                    git url: 'https://github.com/itdefined-org-apps/cicd_k8s.git',
+                        branch: 'main',
+                        credentialsId: 'itdefined-org-apps-github'
+                }
+                withCredentials([file(credentialsId: 'kubeconfig-deployer', variable: 'KUBECONFIG')]) {
+                    sh '''
+                        set -e
+                        kubectl apply -f deploy/ingress-nginx/frontend/
+                        # pin the freshly-built immutable tag onto the running deployment
+                        kubectl -n ingress-frontend set image deployment/frontend frontend=${IMAGE}:${IMAGE_TAG}
+                        kubectl -n ingress-frontend rollout status deployment/frontend --timeout=180s
+                    '''
+                }
+            }
+        }
+    }
+
+}

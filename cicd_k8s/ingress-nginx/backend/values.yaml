@@ -1,0 +1,31 @@
+replicaCount: 2
+
+image:
+  repository: 637423622313.dkr.ecr.ap-south-1.amazonaws.com/backend_node
+  tag: "1"                 # Jenkins overrides with --set image.tag=<BUILD_NUMBER>
+  pullPolicy: IfNotPresent
+
+imagePullSecret: ecr-creds  # ECR token secret (nodes use static keys, not IAM)
+
+# Shared Mongo, reached cross-namespace over internal cluster DNS.
+mongo:
+  host: mongo-service.database.svc.cluster.local
+  port: 27017
+
+# CORS: the SPA's public origin (setup-1 frontend domain).
+corsOrigin: "https://ingress.hobbyez.com"
+
+# backend-secret is rendered by this chart. Mongo creds must match database/01-secret.yaml.
+secret:
+  jwtSecret: super_secret_key
+  mongoUser: admin
+  mongoPassword: password
+  mongoAuthDb: admin
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 300m
+    memory: 256Mi

@@ -1,0 +1,37 @@
+# A cluster-admin ServiceAccount for LOCAL use — you build kubeconfig-admin.yaml from its
+# token and run the admin steps (aws-secret, drivers, providerID) with it, from anywhere.
+# This is the long-lived admin credential your ~/.kube/config stopped being after the rebuild.
+#
+# Applying THIS file needs existing admin (it grants cluster-admin) — do it once on the master.
+# Keep it separate from the CI identity (rbac.yaml / deployer), which stays least-privilege.
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: local-admin
+  namespace: kube-system
+---
+# 1.24+ no longer auto-mints a token Secret; ask for one so it is long-lived (no expiry).
+apiVersion: v1
+kind: Secret
+metadata:
+  name: local-admin-token
+  namespace: kube-system
+  annotations:
+    kubernetes.io/service-account.name: local-admin
+type: kubernetes.io/service-account-token
+---
+# Bind to the BUILT-IN cluster-admin ClusterRole — full control, exactly like the master's
+# admin.conf. That is the point: a laptop credential that can install drivers and patch nodes.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: local-admin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: local-admin
+    namespace: kube-system

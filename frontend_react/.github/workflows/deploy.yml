@@ -1,0 +1,57 @@
+# Setup 2 CI/CD — Frontend via GitHub Actions, deployed with HELM to the gateway-api stack.
+# (Setup 1 uses the Jenkinsfile; this is the parallel Actions pipeline for Setup 2.)
+#
+# Repo secrets required:
+#   AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY   - ECR push
+#   KUBECONFIG_B64                             - base64 of the deployer kubeconfig
+#   DEPLOY_REPO_PAT                            - PAT with read on itdefined-org-apps/cicd_k8s
+name: setup2-frontend
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+env:
+  AWS_REGION: ap-south-1
+  REGISTRY: 637423622313.dkr.ecr.ap-south-1.amazonaws.com
+  IMAGE: 637423622313.dkr.ecr.ap-south-1.amazonaws.com/frontend_react
+  TAG: gh${{ github.run_number }}      # gh1, gh2… — separate namespace from Jenkins's numeric tags
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Build & push image (tag = gh<run number>, immutable)
+        run: |
+          aws ecr get-login-password --region "$AWS_REGION" | docker login --username AWS --password-stdin "$REGISTRY"
+          docker build -t "$IMAGE:$TAG" .
+          docker push "$IMAGE:$TAG"
+
+      # deploy artifacts (the Helm chart) live in the deploy repo
+      - name: Checkout deploy repo
+        uses: actions/checkout@v4
+        with:
+          repository: itdefined-org-apps/cicd_k8s
+          token: ${{ secrets.DEPLOY_REPO_PAT }}
+          path: deploy
+
+      - uses: azure/setup-helm@v4
+      - uses: azure/setup-kubectl@v4
+
+      - name: Deploy with Helm
+        run: |
+          echo "${{ secrets.KUBECONFIG_B64 }}" | base64 -d > kubeconfig
+          export KUBECONFIG="$PWD/kubeconfig"
+          helm upgrade --install frontend deploy/gateway-api/frontend \
+            -n gateway-frontend --create-namespace \
+            --set image.tag=$TAG
+          kubectl -n gateway-frontend rollout status deployment/frontend --timeout=180s

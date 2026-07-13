@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: ingress-frontend
+  labels:
+    app: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      imagePullSecrets:
+        - name: ecr-creds          # ECR token secret (nodes use static keys, not IAM)
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: frontend
+          # Jenkins pins the real BUILD_NUMBER tag at deploy (kubectl set image).
+          image: 637423622313.dkr.ecr.ap-south-1.amazonaws.com/frontend_react:1
+          ports:
+            - containerPort: 3000   # nginx.conf: listen 3000
+          securityContext:
+            allowPrivilegeEscalation: false
+          env:
+            # SPA calls the backend over its public https domain (injected at runtime).
+            - name: BACKEND_URL
+              value: "https://ingress.backend.hobbyez.com"
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10

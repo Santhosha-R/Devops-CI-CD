@@ -1,0 +1,17 @@
+# Envoy Gateway entry point. Listener is plain HTTP on :443 — the NLB in front already
+# terminated TLS with the ACM cert, so Envoy receives decrypted traffic on 443.
+# Routes from any namespace may attach (each app owns its HTTPRoute).
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: acadcart-gateway
+  namespace: default
+spec:
+  gatewayClassName: eg
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 443
+      allowedRoutes:
+        namespaces:
+          from: All

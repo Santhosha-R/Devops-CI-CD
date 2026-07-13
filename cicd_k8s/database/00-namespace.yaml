@@ -1,0 +1,6 @@
+# Shared database namespace. One Mongo, reached by ALL three setups' backends over
+# internal cluster DNS (mongo-service.database.svc.cluster.local) — never exposed publicly.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: database

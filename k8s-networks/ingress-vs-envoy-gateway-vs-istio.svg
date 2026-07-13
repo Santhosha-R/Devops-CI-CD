@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="812" viewBox="0 0 1600 812">
+<defs>
+<marker id="ar" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#334155"/></marker>
+<marker id="arB" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#326CE5"/></marker>
+<marker id="arThin" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#8A97A6"/></marker>
+<marker id="arG" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#0E9F6E"/></marker>
+</defs>
+<rect x="0" y="0" width="1600" height="812" rx="0" ry="0" fill="#F4F7FB" stroke="none" stroke-width="2" opacity="1"/>
+<text x="48" y="58" font-family="Helvetica, Arial, sans-serif" font-size="30" font-weight="700" fill="#0F1E2E" text-anchor="start">NGINX Ingress  vs  Gateway API (Envoy)  vs  Istio</text>
+<text x="48" y="90" font-family="Helvetica, Arial, sans-serif" font-size="16" font-weight="400" fill="#5B6B7B" text-anchor="start">Same job at the edge — very different scope, power, and operational cost</text>
+<rect x="56" y="140" width="486" height="566" rx="16" ry="16" fill="#fff" stroke="#009639" stroke-width="2" opacity="1"/>
+<rect x="56" y="140" width="486" height="68" rx="16" ry="16" fill="#009639" stroke="none" stroke-width="2" opacity="1"/>
+<rect x="56" y="174" width="486" height="34" rx="0" ry="0" fill="#009639" stroke="none" stroke-width="2" opacity="1"/>
+<circle cx="96" cy="174" r="20" fill="#fff"/>
+<g transform="translate(83.00,161.00) scale(1.0833)" fill="#009639"><path d="M12 0L1.605 6v12L12 24l10.395-6V6L12 0zm6 16.59c0 .705-.646 1.29-1.529 1.29-.631 0-1.351-.255-1.801-.81l-6-7.141v6.66c0 .721-.57 1.29-1.274 1.29H7.32c-.721 0-1.29-.6-1.29-1.29V7.41c0-.705.63-1.29 1.5-1.29.646 0 1.38.255 1.83.81l5.97 7.141V7.41c0-.721.6-1.29 1.29-1.29h.075c.72 0 1.29.6 1.29 1.29v9.18H18z"/></g>
+<text x="128" y="170" font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#fff" text-anchor="start">NGINX Ingress</text>
+<text x="128" y="191" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#FFFFFFDD" text-anchor="start">Ingress API · frozen + EOL</text>
+<text x="78" y="236" font-family="Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#8A97A6" text-anchor="start">API model</text>
+<text x="78" y="257" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#1B2733" text-anchor="start">Ingress + un-typed annotations</text>
+<line x1="74" y1="274" x2="524" y2="274" stroke="#EEF1F5" stroke-width="1.5"/>
+<text x="78" y="300" font-family="Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#8A97A6" text-anchor="start">Data plane</text>
+<text x="78" y="321" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#1B2733" text-anchor="start">NGINX</text>
+<line x1="74" y1="338" x2="524" y2="338" stroke="#EEF1F5" stroke-width="1.5"/>
+<text x="78" y="364" font-family="Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#8A97A6" text-anchor="start">Scope</text>
+<text x="78" y="385" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#1B2733" text-anchor="start">North–South (edge only)</text>
+<line x1="74" y1="402" x2="524" y2="402" stroke="#EEF1F5" stroke-width="1.5"/>
+<text x="78" y="428" font-family="Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#8A97A6" text-anchor="start">Traffic mgmt</text>
+<text x="78" y="449" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#1B2733" text-anchor="start">Basic · canary via annotations</text>
+<line x1="74" y1="466" x2="524" y2="466" stroke="#EEF1F5" stroke-width="1.5"/>
+<text x="78" y="492" font-family="Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#8A97A6" text-anchor="start">mTLS (east–west)</text>
+<text x="78" y="513" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#C0392B" text-anchor="start">✗  none</text>
+<line x1="74" y1="530" x2="524" y2="530" stroke="#EEF1F5" stroke-width="1.5"/>
+<text x="78" y="556" font-family="Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#8A97A6" text-anchor="start">Complexity</text>
+<text x="78" y="577" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#1B2733" text-anchor="start">●○○  Low</text>
+<line x1="74" y1="594" x2="524" y2="594" stroke="#EEF1F5" stroke-width="1.5"/>
+<rect x="72" y="622" width="454" height="60" rx="10" ry="10" fill="#F3F8F3" stroke="#009639" stroke-width="1.2" opacity="1"/>
+<text x="299.0" y="646" font-family="Helvetica, Arial, sans-serif" font-size="11.5" font-weight="middle" fill="#33404F" text-anchor="18">Best for: simple HTTP routing, one entry point.</text>
+<text x="299.0" y="663" font-family="Helvetica, Arial, sans-serif" font-size="11.5" font-weight="middle" fill="#33404F" text-anchor="18">Note: retired 3/2026 — migrate to Gateway API.</text>
+<rect x="562" y="140" width="486" height="566" rx="16" ry="16" fill="#fff" stroke="#AC6199" stroke-width="2" opacity="1"/>
+<rect x="562" y="140" width="486" height="68" rx="16" ry="16" fill="#AC6199" stroke="none" stroke-width="2" opacity="1"/>
+<rect x="562" y="174" width="486" height="34" rx="0" ry="0" fill="#AC6199" stroke="none" stroke-width="2" opacity="1"/>
+<circle cx="602" cy="174" r="20" fill="#fff"/>
+<g transform="translate(589.00,161.00) scale(1.0833)" fill="#AC6199"><path d="m23.351 7.593-7.068-4.379a1.034 1.034 0 0 0-.84-.117c-.02.01-.052.021-.074.032L8.471 6.105a.695.695 0 0 0-.435.68l.17 7.355c.01.298.191.595.478.765l7.068 4.38c.255.159.574.201.84.116.02-.01.053-.021.074-.032l6.898-2.976a.705.705 0 0 0 .436-.68l-.17-7.355c-.011-.297-.192-.584-.479-.765m-7.185 10.044-6.143-3.805-.149-6.388 5.995-2.583 6.143 3.805.149 6.388zm.011-6.027a.832.832 0 0 0-.414-.67l-5.06-3.135-.159.064.032 1.52 4.007 2.487.095 4.06 1.53.946.086-.032zm-6.058 7.132L5.41 15.83l-.116-4.89 2.146-.924-.042-1.69-3.327 1.435a.611.611 0 0 0-.382.595l.138 5.74c0 .265.16.52.414.67l5.516 3.422c.224.138.5.18.734.106a.15.15 0 0 1 .064-.021l3.252-1.403-1.616-1zm-2.615-6.1-1.52-.947.032 1.446 1.52.946zm2.19 5.059-.032-1.414-1.329-.83c-.021-.01-.042-.031-.053-.042l.032 1.425zm-4.751 1.902-3.476-2.158-.085-3.613 1.7-.734-.031-1.445-2.72 1.17a.527.527 0 0 0-.33.51l.106 4.336c0 .223.138.446.35.574l4.167 2.582a.822.822 0 0 0 .627.096c.021-.01.043-.01.064-.021l2.561-1.106-1.392-.86Z"/></g>
+<text x="634" y="170" font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#fff" text-anchor="start">Gateway API + Envoy</text>
+<text x="634" y="191" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#FFFFFFDD" text-anchor="start">Gateway API · the successor</text>
+<text x="584" y="236" font-family="Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#8A97A6" text-anchor="start">API model</text>
+<text x="584" y="257" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#1B2733" text-anchor="start">GatewayClass · Gateway · HTTPRoute (typed)</text>
+<line x1="580" y1="274" x2="1030" y2="274" stroke="#EEF1F5" stroke-width="1.5"/>
+<text x="584" y="300" font-family="Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#8A97A6" text-anchor="start">Data plane</text>
+<text x="584" y="321" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#1B2733" text-anchor="start">Envoy</text>
+<line x1="580" y1="338" x2="1030" y2="338" stroke="#EEF1F5" stroke-width="1.5"/>
+<text x="584" y="364" font-family="Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#8A97A6" text-anchor="start">Scope</text>
+<text x="584" y="385" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#1B2733" text-anchor="start">North–South (edge only)</text>
+<line x1="580" y1="402" x2="1030" y2="402" stroke="#EEF1F5" stroke-width="1.5"/>
+<text x="584" y="428" font-family="Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#8A97A6" text-anchor="start">Traffic mgmt</text>
+<text x="584" y="449" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#1B2733" text-anchor="start">Native splits, header/method match</text>
+<line x1="580" y1="466" x2="1030" y2="466" stroke="#EEF1F5" stroke-width="1.5"/>
+<text x="584" y="492" font-family="Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#8A97A6" text-anchor="start">mTLS (east–west)</text>
+<text x="584" y="513" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#C0392B" text-anchor="start">✗  (add a mesh for that)</text>
+<line x1="580" y1="530" x2="1030" y2="530" stroke="#EEF1F5" stroke-width="1.5"/>
+<text x="584" y="556" font-family="Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#8A97A6" text-anchor="start">Complexity</text>
+<text x="584" y="577" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#1B2733" text-anchor="start">●●○  Medium</text>
+<line x1="580" y1="594" x2="1030" y2="594" stroke="#EEF1F5" stroke-width="1.5"/>
+<rect x="578" y="622" width="454" height="60" rx="10" ry="10" fill="#FBF5F9" stroke="#AC6199" stroke-width="1.2" opacity="1"/>
+<text x="805.0" y="646" font-family="Helvetica, Arial, sans-serif" font-size="11.5" font-weight="middle" fill="#33404F" text-anchor="18">Best for: modern, multi-team edge routing —</text>
+<text x="805.0" y="663" font-family="Helvetica, Arial, sans-serif" font-size="11.5" font-weight="middle" fill="#33404F" text-anchor="18">the Ingress replacement.</text>
+<rect x="1068" y="140" width="486" height="566" rx="16" ry="16" fill="#fff" stroke="#466BB0" stroke-width="2" opacity="1"/>
+<rect x="1068" y="140" width="486" height="68" rx="16" ry="16" fill="#466BB0" stroke="none" stroke-width="2" opacity="1"/>
+<rect x="1068" y="174" width="486" height="34" rx="0" ry="0" fill="#466BB0" stroke="none" stroke-width="2" opacity="1"/>
+<circle cx="1108" cy="174" r="20" fill="#fff"/>
+<g transform="translate(1095.00,161.00) scale(1.0833)" fill="#466BB0"><path d="M4 21 20 21 10 24zM4 20 10 19 10 8zM11 19 20 20 11 0z"/></g>
+<text x="1140" y="170" font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#fff" text-anchor="start">Istio</text>
+<text x="1140" y="191" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#EAF0FF" text-anchor="start">Service Mesh (+ Gateway API)</text>
+<text x="1090" y="236" font-family="Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#8A97A6" text-anchor="start">API model</text>
+<text x="1090" y="257" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#1B2733" text-anchor="start">Gateway · VirtualService · DestinationRule</text>
+<line x1="1086" y1="274" x2="1536" y2="274" stroke="#EEF1F5" stroke-width="1.5"/>
+<text x="1090" y="300" font-family="Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#8A97A6" text-anchor="start">Data plane</text>
+<text x="1090" y="321" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#1B2733" text-anchor="start">Envoy at edge + a sidecar per pod</text>
+<line x1="1086" y1="338" x2="1536" y2="338" stroke="#EEF1F5" stroke-width="1.5"/>
+<text x="1090" y="364" font-family="Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#8A97A6" text-anchor="start">Scope</text>
+<text x="1090" y="385" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#1B2733" text-anchor="start">North–South  +  East–West (mesh)</text>
+<line x1="1086" y1="402" x2="1536" y2="402" stroke="#EEF1F5" stroke-width="1.5"/>
+<text x="1090" y="428" font-family="Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#8A97A6" text-anchor="start">Traffic mgmt</text>
+<text x="1090" y="449" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#1B2733" text-anchor="start">Rich: retries, mirror, fault, circuit-break</text>
+<line x1="1086" y1="466" x2="1536" y2="466" stroke="#EEF1F5" stroke-width="1.5"/>
+<text x="1090" y="492" font-family="Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#8A97A6" text-anchor="start">mTLS (east–west)</text>
+<text x="1090" y="513" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#0E9F6E" text-anchor="start">✓  automatic, cluster-wide</text>
+<line x1="1086" y1="530" x2="1536" y2="530" stroke="#EEF1F5" stroke-width="1.5"/>
+<text x="1090" y="556" font-family="Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#8A97A6" text-anchor="start">Complexity</text>
+<text x="1090" y="577" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#1B2733" text-anchor="start">●●●  High</text>
+<line x1="1086" y1="594" x2="1536" y2="594" stroke="#EEF1F5" stroke-width="1.5"/>
+<rect x="1084" y="622" width="454" height="60" rx="10" ry="10" fill="#F1F4FB" stroke="#466BB0" stroke-width="1.2" opacity="1"/>
+<text x="1311.0" y="646" font-family="Helvetica, Arial, sans-serif" font-size="11.5" font-weight="middle" fill="#33404F" text-anchor="18">Best for: zero-trust mTLS, advanced traffic,</text>
+<text x="1311.0" y="663" font-family="Helvetica, Arial, sans-serif" font-size="11.5" font-weight="middle" fill="#33404F" text-anchor="18">deep observability.</text>
+<line x1="56" y1="758" x2="1554" y2="758" stroke="#B7C0CC" stroke-width="3" marker-end="url(#arThin)"/>
+<text x="60" y="744" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#5B6B7B" text-anchor="start">Simpler · lighter · less to operate</text>
+<text x="1554" y="744" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#5B6B7B" text-anchor="end">More powerful · more moving parts</text>
+</svg>

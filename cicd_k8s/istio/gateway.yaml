@@ -1,0 +1,24 @@
+# Istio ingress Gateway — binds the shared istio-ingressgateway (selector istio: ingressgateway).
+# Listens plain HTTP on :80 (istio 1.24's envoy binds :80 directly). The NLB in
+# front already terminated TLS with the ACM cert, so traffic here is decrypted.
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: acadcart-gateway
+  namespace: istio-ingress
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    # Single HTTP listener on :80. The NLB sends BOTH its listeners here:
+    #   :443 -> ACM-decrypted plain HTTP  (encrypted to the browser)
+    #   :80  -> plain HTTP                 (so the bare http:// URL also opens)
+    # istio can't 301-redirect http->https here: the NLB terminates TLS, so envoy sees
+    # plain HTTP on both paths and cannot tell them apart. Serving both is the reliable choice.
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "istio.hobbyez.com"
+        - "istio.backend.hobbyez.com"

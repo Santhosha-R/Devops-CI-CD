@@ -1,0 +1,51 @@
+# Setup 1 routing — one Ingress per namespace (an Ingress only sees Services in its own ns).
+# TLS via cert-manager + Let's Encrypt: the `cluster-issuer` annotation tells cert-manager to
+# obtain a cert for the tls hosts and store it in the named secret; nginx terminates with it.
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: frontend
+  namespace: ingress-frontend
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts: [ingress.hobbyez.com]
+      secretName: frontend-tls        # cert-manager creates/fills this
+  rules:
+    - host: ingress.hobbyez.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: backend
+  namespace: ingress-backend
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts: [ingress.backend.hobbyez.com]
+      secretName: backend-tls
+  rules:
+    - host: ingress.backend.hobbyez.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: backend
+                port:
+                  number: 3000

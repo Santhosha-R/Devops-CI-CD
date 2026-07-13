@@ -1,0 +1,14 @@
+# Cluster-scoped. Database PVCs reference this by name: storageClassName: ebs-sc
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: ebs-sc
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"
+provisioner: ebs.csi.aws.com
+parameters:
+  type: gp3
+  fsType: ext4
+volumeBindingMode: WaitForFirstConsumer   # create the disk in the AZ the Pod lands in
+allowVolumeExpansion: true                # lets you grow the PVC later
+reclaimPolicy: Retain                     # keep the EBS volume if the PVC is deleted
